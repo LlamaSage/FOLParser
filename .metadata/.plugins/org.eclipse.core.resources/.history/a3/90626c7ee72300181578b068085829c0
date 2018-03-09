@@ -1,0 +1,141 @@
+package parser;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.ArrayList;
+
+import objects.FOLElement;
+import objects.FOLFunction;
+import objects.FOLObject;
+import objects.FOLVariable;
+import exceptions.ForbiddenKeywordException;
+import exceptions.InvalidOverwriteException;
+
+public class FOLParser
+{
+    private String name = "[a-zA-Z0-9_]+";
+
+    private String number = "[0-9]+";
+
+    private String function = name + "\\(.*\\)"; // TODO: Fix expression
+
+    private String term = "(nie )?" + function;
+
+    @SuppressWarnings("unused")
+    private String formula = term + "( lub " + term + ")*";
+
+    public void ParseFile(String fileLocation, ArrayList<FOLObject> objectList, ArrayList<FOLVariable> variableList, ArrayList<FOLFunction> functionList) // DEFINITION
+    // of
+    // variables,
+    // objects
+    // and
+    // functions
+    {
+        try
+        {
+
+            String line = null;
+
+            FileReader freader = new FileReader(fileLocation);
+            BufferedReader reader = new BufferedReader(freader);
+            while ((line = reader.readLine()) != null) // read & match line
+            {
+                ParseSingleLine(line, objectList, variableList, functionList);
+            }
+            reader.close();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void ParseSingleLine(String singleString, ArrayList<FOLObject> objectList, ArrayList<FOLVariable> variableList, ArrayList<FOLFunction> functionList) throws ForbiddenKeywordException
+    {
+        String[] split = singleString.split(" ");
+        if (singleString.matches("TELL object " + name))
+        {
+            if (split[2].equals("lub") || split[2].equals("nie"))
+            {
+                throw new ForbiddenKeywordException("Forbidden keyword \"" + split[2] + "\"");
+            }
+        }
+        else if (singleString.matches("TELL variable " + name))
+        {
+            if (split[2].equals("lub") || split[2].equals("nie"))
+            {
+                throw new ForbiddenKeywordException("Forbidden keyword \"" + split[2] + "\"");
+            }
+        }
+        else if (singleString.matches("TELL function " + name + " " + number))
+        {
+            if (split[2].equals("lub") || split[2].equals("nie"))
+            {
+                throw new ForbiddenKeywordException("Forbidden keyword \"" + split[2] + "\"");
+            }
+            if (Integer.parseInt(split[3]) == 0)
+            {
+                throw new IllegalArgumentException("Illegal number value \"" + split[3] + "\"");
+            }
+        }
+        else if (singleString.matches("TELL formula "))
+        {
+
+        }
+        else
+        // If line matches none of the expected inputs
+        {
+
+        }
+    }
+
+    public void addOrOverwrite(FOLElement element, ArrayList<FOLObject> objectList, ArrayList<FOLVariable> variableList, ArrayList<FOLFunction> functionList) throws InvalidOverwriteException
+    {        
+        for (FOLObject l : objectList)
+        {
+            if (l.name == element.name)
+            {
+                if(element instanceof FOLObject)
+                {
+                    objectList.set(objectList.indexOf(l),(FOLObject) element);
+                    return;
+                }
+                else
+                {
+                    throw new InvalidOverwriteException("Name for Object already in use by Variable/Function");
+                }
+            }
+        }
+        if(element instanceof FOLObject)
+        {
+            objectList.add((FOLObject) element);
+            return;
+        }
+        
+        
+        
+        for (FOLVariable l : variableList)
+        {
+            if (l.name == element.name)
+            {
+                if(element instanceof FOLVariable)
+                {
+                    variableList.set(variableList.indexOf(l),(FOLVariable) element);
+                    return;
+                }
+                else
+                {
+                    throw new InvalidOverwriteException("Name for Variable already in use by Object/Function");
+                }
+            }
+        }
+        if(element instanceof FOLVariable)
+        {
+            variableList.add((FOLVariable) element);
+            return;
+        }
+        
+    }
+
+}

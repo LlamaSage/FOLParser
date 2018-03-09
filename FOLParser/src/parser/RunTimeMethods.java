@@ -3,18 +3,18 @@ package parser;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import objects.*;
 
 public class RunTimeMethods
 {
-    public LinkedList<FOLObject> objects;
+    public ArrayList<FOLObject> objects = new ArrayList<FOLObject>();
 
-    public LinkedList<FOLVariable> variables;
+    public ArrayList<FOLVariable> variables = new ArrayList<FOLVariable>();
 
-    public LinkedList<FOLFunction> functions;
+    public ArrayList<FOLFunction> functions = new ArrayList<FOLFunction>();
 
     FOLParser parser = new FOLParser();
 
@@ -22,7 +22,7 @@ public class RunTimeMethods
     {
         Scanner scan = new Scanner(System.in);
 
-        System.out.println("Input first file name/location:");
+        System.out.println("Input file name/location:");
         Path path = Paths.get(scan.nextLine());
         while (Files.notExists(path))
         {
@@ -30,7 +30,7 @@ public class RunTimeMethods
             path = Paths.get(scan.nextLine());
         }
 
-        parser.ParseFirstFile(scan.nextLine(), objects, variables, functions);
+        parser.ParseFile(path.toString(), objects, variables, functions);
         
         scan.close();
     }

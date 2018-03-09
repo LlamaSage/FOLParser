@@ -1,0 +1,3 @@
+TELL object asd
+TELL function sd 5
+TELL function sd 4

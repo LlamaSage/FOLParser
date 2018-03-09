@@ -1,0 +1,10 @@
+package objects;
+
+public class FOLFunction extends FOLElement
+{
+    public FOLFunction(String name)
+    {
+        this.name=name;
+    }
+
+}

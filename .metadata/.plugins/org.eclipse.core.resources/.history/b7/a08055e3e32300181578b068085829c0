@@ -1,0 +1,14 @@
+package exceptions;
+
+public class InvalidOverwriteException
+{
+    public InvalidOverwriteException()
+    {
+        
+    }
+    
+    public InvalidOverwriteException(String s)
+    {
+       super(s);
+    }
+}

@@ -1,0 +1,15 @@
+package parser;
+
+import java.util.ArrayList;
+
+public class Main
+{
+    public static void main(String[] args)
+    {
+        ArrayList<String> test = new ArrayList<String>();
+        
+        
+        RunTimeMethods run = new RunTimeMethods();
+        run.initialFileInput();
+    }
+}

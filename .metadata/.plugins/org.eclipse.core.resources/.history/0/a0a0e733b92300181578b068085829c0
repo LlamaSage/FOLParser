@@ -1,0 +1,11 @@
+package objects;
+
+public class FOLFunction extends FOLElement
+{
+
+    
+    public boolean solve()
+    {
+        return true;
+    }
+}
