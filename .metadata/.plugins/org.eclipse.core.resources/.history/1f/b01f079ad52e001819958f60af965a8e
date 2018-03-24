@@ -1,0 +1,11 @@
+package objects;
+
+public class CouldNotFindDefinitionException extends Exception
+{
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -4577867374444035633L;
+
+}

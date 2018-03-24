@@ -1,0 +1,65 @@
+package objects;
+
+import parser.FOLMatchEnum;
+
+public class FOLFunction extends FOLElement
+{
+    public FOLElement[] arguments;
+
+    public FOLFunctionPrototype prototype;
+
+    // TODO: Add Arguments
+
+    public FOLFunction(String name, FOLFunctionPrototype prototype, FOLElement[] arguments)
+    {
+        super(name);
+        this.prototype = prototype;
+        this.arguments = arguments;
+
+        
+
+    }
+
+    @Override
+    public FOLMatchEnum compareTo(FOLElement e)
+    {
+        if (e instanceof FOLFunction)
+        {
+            FOLFunction func = (FOLFunction) e;
+            if (this.prototype == func.prototype)
+            {
+                FOLMatchEnum funcMatch = FOLMatchEnum.FullMatch;
+                for (int i = 0; i < arguments.length; i++)
+                {
+                    switch (this.arguments[i].compareTo(func.arguments[i]))
+                    {
+                        case FullMatch:
+
+                            break;
+
+                        case PartialMatch:
+                            funcMatch = FOLMatchEnum.PartialMatch;
+                            break;
+
+                        case NoMatch:
+                            return FOLMatchEnum.NoMatch;
+                    }
+                }
+                return funcMatch;
+            }
+        }
+
+        return FOLMatchEnum.NoMatch;
+    }
+    
+    public String toString()
+    {
+        String result = this.name+"(";
+        for (FOLElement e : arguments)
+        {
+            result+= e.toString();
+        }
+        result+=")";
+        return result;
+    }
+}

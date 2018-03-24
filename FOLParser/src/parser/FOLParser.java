@@ -3,28 +3,39 @@ package parser;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.TreeMap;
 
 import objects.FOLElement;
-import objects.FOLFunction;
+import objects.FOLFormula;
+import objects.FOLFunctionPrototype;
 import objects.FOLObject;
 import objects.FOLVariable;
-import exceptions.ForbiddenKeywordException;
+import exceptions.InvalidInputException;
 import exceptions.InvalidOverwriteException;
 
 public class FOLParser
 {
-    private String name = "[a-zA-Z0-9_]+";
+    private String name = "[a-zA-Z]+[a-zA-Z0-9_]*";
 
     private String number = "[0-9]+";
 
-    private String function = name + "\\(.*\\)"; // TODO: Fix expression
+    private String function = name + "\\(.+\\)"; // TODO: Fix expression (will
+                                                 // require parser)
 
-    private String term = "(nie )?" + function;
+    private String term = "(nie )?(" + function + "|" + name + ")?"; // TODO:
+                                                                     // Add
+                                                                     // object
+                                                                     // expression
+                                                                     // (done?)
 
     @SuppressWarnings("unused")
     private String formula = term + "( lub " + term + ")*";
+    
+    
+    
+    
 
-    public void ParseFile(String fileLocation, ArrayList<FOLObject> objectList, ArrayList<FOLVariable> variableList, ArrayList<FOLFunction> functionList) // DEFINITION
+    public void ParseFile(String fileLocation, TreeMap<String, FOLElement> names, ArrayList<FOLFormula> formulas) // DEFINITION
     // of
     // variables,
     // objects
@@ -40,7 +51,7 @@ public class FOLParser
             BufferedReader reader = new BufferedReader(freader);
             while ((line = reader.readLine()) != null) // read & match line
             {
-                ParseSingleLine(line, objectList, variableList, functionList);
+                ParseSingleLine(line, names, formulas);
             }
             reader.close();
         }
@@ -51,128 +62,65 @@ public class FOLParser
 
     }
 
-    public void ParseSingleLine(String singleString, ArrayList<FOLObject> objectList, ArrayList<FOLVariable> variableList, ArrayList<FOLFunction> functionList) throws ForbiddenKeywordException, InvalidOverwriteException
+    public void ParseSingleLine(String singleString, TreeMap<String, FOLElement> names, ArrayList<FOLFormula> formulas) throws Exception
     {
-        String[] split = singleString.split(" ");
+
         if (singleString.matches("TELL object " + name))
         {
-            if (split[2].equals("lub") || split[2].equals("nie"))
-            {
-                throw new ForbiddenKeywordException("Forbidden keyword \"" + split[2] + "\"");
-            }
-            AddOrOverwrite(new FOLObject(split[2]), objectList, variableList, functionList);
+            AddOrOverwrite(FOLObject.parse(singleString), names);
         }
         else if (singleString.matches("TELL variable " + name))
         {
-            if (split[2].equals("lub") || split[2].equals("nie"))
-            {
-                throw new ForbiddenKeywordException("Forbidden keyword \"" + split[2] + "\"");
-            }
-            AddOrOverwrite(new FOLVariable(split[2]), objectList, variableList, functionList);
+
+            AddOrOverwrite(FOLVariable.parse(singleString), names);
         }
         else if (singleString.matches("TELL function " + name + " " + number))
         {
-            if (split[2].equals("lub") || split[2].equals("nie"))
-            {
-                throw new ForbiddenKeywordException("Forbidden keyword \"" + split[2] + "\"");
-            }
-            if (Integer.parseInt(split[3]) == 0)
-            {
-                throw new IllegalArgumentException("Illegal number value \"" + split[3] + "\"");
-            }
-            AddOrOverwrite(new FOLFunction(split[2], Integer.parseInt(split[3])), objectList, variableList, functionList);
-        }
-        else if (singleString.matches("TELL formula "))
-        {
 
+            AddOrOverwrite(FOLFunctionPrototype.parse(singleString), names);
+        }
+        else if (singleString.matches("TELL formula .*"))
+        {
+            //TODO: Keep an eye on
+            formulas.add(FOLFormula.parse(singleString.substring(13), names));
+            insertionSortFormulas(formulas);
         }
         else
         // If line matches none of the expected inputs
         {
-
+            if (!(singleString.trim().isEmpty() || singleString.matches("//.*")))
+                throw new InvalidInputException("Unexpected input: " + singleString);
         }
     }
 
-    public void AddOrOverwrite(FOLElement element, ArrayList<FOLObject> objectList, ArrayList<FOLVariable> variableList, ArrayList<FOLFunction> functionList) throws InvalidOverwriteException
+    public void AddOrOverwrite(FOLElement element, TreeMap<String, FOLElement> names) throws InvalidOverwriteException
     {
-        for (int i = 0; i < objectList.size(); i++) // CHECK objectList for
-                                                    // duplicate name
-        {
-            if (objectList.get(i).name.equals(element.name))
-            {
-                if (element instanceof FOLObject)
-                {
-                    objectList.set(i, (FOLObject) element); // duplicate of same
-                                                            // type gets
-                                                            // replaced
-                    return;
-                }
-                else
-                {
-                    throw new InvalidOverwriteException("Name \"" + element.name + "\" for Object already in use by Variable/Function");
-                }
-            }
-        }
 
-        for (int i = 0; i < variableList.size(); i++) // CHECK variableList for
-                                                      // duplicate name
+        if (names.containsKey(element.name))
         {
-            if (variableList.get(i).name.equals(element.name))
-            {
-                if (element instanceof FOLVariable)
-                {
-                    variableList.set(i, (FOLVariable) element); // duplicate of
-                                                                // same type
-                                                                // gets replaced
-                    return;
-                }
-                else
-                {
-                    throw new InvalidOverwriteException("Name \"" + element.name + "\" for Variable already in use by Object/Function");
-                }
-            }
+            if (!element.equals(names.get(element.name)))
+                throw new InvalidOverwriteException("Invalid Overwrite for name " + element.name + ".");
         }
-
-        for (int i = 0; i < functionList.size(); i++) // CHECK functionList for
-                                                      // duplicate name
-        {
-            if (functionList.get(i).name.equals(element.name))
-            {
-                if (element instanceof FOLFunction)
-                {
-                    if (((FOLFunction) element).number != functionList.get(i).number)
-                    {
-                        throw new InvalidOverwriteException("Function Overwrite \"" + element.name + "\" needs to have the same number of parameters");
-                    }
-
-                    functionList.set(i, (FOLFunction) element); // duplicate of
-                                                                // same type
-                                                                // gets replaced
-                    return;
-                }
-                else
-                {
-                    throw new InvalidOverwriteException("Name \"" + element.name + "\" for Function already in use by Variable/Object");
-                }
-            }
-        }
-
-        if (element instanceof FOLObject)
-        {
-            objectList.add((FOLObject) element);
-            return;
-        }
-        else if (element instanceof FOLVariable)
-        {
-            variableList.add((FOLVariable) element);
-            return;
-        }
-        else if (element instanceof FOLFunction)
-        {
-            functionList.add((FOLFunction) element);
-            return;
-        }
+        else
+            names.put(element.name, element);
 
     }
-
+    
+    private void insertionSortFormulas(ArrayList<FOLFormula> formulas) //TODO: Check
+    {
+        int size = formulas.size();
+        if(size<2)
+            return;
+        for (int i=0; i<size-1; i++)
+        {
+            if(formulas.get(size-1).terms.size()<=formulas.get(i).terms.size())
+            {
+                formulas.add(i, formulas.get(size-1));
+                formulas.remove(size);
+                return;
+            }
+        }
+        
+    }
+    
 }

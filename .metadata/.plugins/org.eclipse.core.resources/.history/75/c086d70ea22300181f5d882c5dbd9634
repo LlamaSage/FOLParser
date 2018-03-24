@@ -1,9 +1,0 @@
-package objects;
-
-public class FOLTerm
-{
-    public FOLFunction func;
-    public boolean notInverted;
-    
-    
-}

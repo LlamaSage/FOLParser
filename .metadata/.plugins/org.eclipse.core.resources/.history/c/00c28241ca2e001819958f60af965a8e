@@ -1,0 +1,15 @@
+package parser;
+
+import objects.FOLElement;
+import objects.FOLFunctionPrototype;
+
+public class Main
+{
+    public static void main(String[] args)
+    {
+        System.out.println(((FOLElement) new FOLFunctionPrototype("abc", 2)).getClass() == ((FOLElement) new FOLFunctionPrototype("abcd", 2)).getClass());
+        RunTimeMethods run = new RunTimeMethods();
+        run.FileInput();
+        run.printListToConsole(4);
+    }
+}

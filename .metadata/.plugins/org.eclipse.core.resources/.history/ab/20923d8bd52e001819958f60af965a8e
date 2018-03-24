@@ -1,0 +1,6 @@
+package objects;
+
+public class CouldNotFindDefinitionException extends Exception
+{
+
+}

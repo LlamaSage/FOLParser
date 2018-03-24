@@ -1,0 +1,65 @@
+package objects;
+
+import java.util.ArrayList;
+
+import parser.FOLMatchEnum;
+import exceptions.InvalidInputException;
+
+public class FOLFunction extends FOLElement
+{
+    public FOLElement[] arguments;
+
+    public FOLFunctionPrototype prototype;
+
+    // TODO: Add Arguments
+
+    public FOLFunction(String name, FOLFunctionPrototype prototype, FOLElement[] arguments, ArrayList<FOLFunctionPrototype> prototypes) throws InvalidInputException
+    {
+        super(name);
+        this.prototype = prototype;
+        this.arguments = arguments;
+
+        boolean hasNoPrototype = true;
+        for (FOLFunctionPrototype p : prototypes)
+        {
+            if (this.name.equals(p.name) && this.number == p.number)
+                hasNoPrototype = false;
+        }
+
+        if (hasNoPrototype)
+            throw new InvalidInputException("Cannot initiate function " + name + ". No matching prototype declaration found.");
+
+    }
+
+    @Override
+    public FOLMatchEnum compareTo(FOLElement e)
+    {
+        if (e instanceof FOLFunction)
+        {
+            FOLFunction func = (FOLFunction) e;
+            if (this.prototype == func.prototype)
+            {
+                FOLMatchEnum funcMatch = FOLMatchEnum.FullMatch;
+                for (int i = 0; i < arguments.length; i++)
+                {
+                    switch (this.arguments[i].compareTo(func.arguments[i]))
+                    {
+                        case FullMatch:
+
+                            break;
+
+                        case PartialMatch:
+                            funcMatch = FOLMatchEnum.PartialMatch;
+                            break;
+
+                        case NoMatch:
+                            return FOLMatchEnum.NoMatch;
+                    }
+                }
+                return funcMatch;
+            }
+        }
+
+        return FOLMatchEnum.NoMatch;
+    }
+}

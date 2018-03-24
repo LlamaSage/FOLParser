@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Move element &apos;CouldNotFindDefinitionException.java&apos; to &apos;FOLParser/src/exceptions&apos;&#x0D;&#x0A;- Original project: &apos;FOLParser&apos;&#x0D;&#x0A;- Destination element: &apos;FOLParser/src/exceptions&apos;&#x0D;&#x0A;- Original element: &apos;objects.CouldNotFindDefinitionException.java&apos;&#x0D;&#x0A;- Update references to refactored element" description="Move compilation unit" destination="/src&lt;exceptions" element1="/src&lt;objects{CouldNotFindDefinitionException.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.move" patterns="*" policy="org.eclipse.jdt.ui.moveResources" qualified="false" references="true" stamp="1521835558247" units="1" version="1.0"/>
+</session>

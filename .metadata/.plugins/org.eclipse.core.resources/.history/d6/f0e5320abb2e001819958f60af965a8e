@@ -1,0 +1,23 @@
+package objects;
+
+import parser.FOLMatchEnum;
+
+public class FOLObject extends FOLElement
+{
+    
+    public FOLObject(String name)
+    {
+        super(name);
+    }
+
+    @Override
+    public FOLMatchEnum compareTo(FOLElement e)
+    {
+        if(e instanceof FOLObject)
+            if(this==e)
+                return FOLMatchEnum.FullMatch;
+        return FOLMatchEnum.NoMatch;
+    }
+    
+    
+}

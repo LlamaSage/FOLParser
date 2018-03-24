@@ -1,0 +1,16 @@
+package objects;
+
+public abstract class FOLElement
+{
+    public String name;
+
+    public FOLElement(String name)
+    {
+        this.name = name;
+    }
+
+    public abstract FOLMatchEnum compareTo(FOLElement e);
+    // 0 = full match
+    // 1 = partial match
+    // 2 = no match
+}

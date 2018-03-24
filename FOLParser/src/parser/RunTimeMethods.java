@@ -4,21 +4,25 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Scanner;
+import java.util.TreeMap;
 
 import objects.*;
 
 public class RunTimeMethods
 {
-    public ArrayList<FOLObject> objects = new ArrayList<FOLObject>();
-
-    public ArrayList<FOLVariable> variables = new ArrayList<FOLVariable>();
-
-    public ArrayList<FOLFunction> functions = new ArrayList<FOLFunction>();
+    
+    public TreeMap<String, FOLElement> names = new TreeMap<String, FOLElement>();
+    public ArrayList<FOLFormula> formulas = new ArrayList<FOLFormula>();
+    // 0 = objects
+    // 1 = variables
+    // 2 = functions
+    // 3 = terms
 
     FOLParser parser = new FOLParser();
 
-    public void initialFileInput()
+    public void FileInput()
     {
         Scanner scan = new Scanner(System.in);
 
@@ -30,12 +34,12 @@ public class RunTimeMethods
             path = Paths.get(scan.nextLine());
         }
 
-        parser.ParseFile(path.toString(), objects, variables, functions);
-        
+        parser.ParseFile(path.toString(), names, formulas);
+
         scan.close();
     }
 
-    public void waitForInput()
+    public void waitForInput() //TODO: Just a proxy for the meantime
     {
         Scanner scan = new Scanner(System.in);
         while (true)
@@ -49,5 +53,24 @@ public class RunTimeMethods
         }
 
         scan.close();
+    }
+
+    public void printListToConsole()
+    {
+        System.out.println();
+        Iterator<String> iterator = names.keySet().iterator();
+
+        while (iterator.hasNext()) {
+           String key = iterator.next().toString();
+           FOLElement value = names.get(key);
+
+           System.out.println(value.toString());
+        }
+        System.out.println();
+        
+        for(FOLFormula form : formulas)
+        {
+            form.printFormula();
+        }
     }
 }

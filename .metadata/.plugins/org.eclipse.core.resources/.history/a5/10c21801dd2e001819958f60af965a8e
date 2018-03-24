@@ -1,0 +1,50 @@
+package objects;
+
+import java.util.ArrayList;
+import java.util.TreeMap;
+
+public class FOLFormula
+{
+
+    public ArrayList<FOLTerm> terms = new ArrayList<FOLTerm>();
+
+    public FOLFormula()
+    {
+
+    }
+
+    public static FOLFormula parse(String s, TreeMap<String, FOLElement> names) throws Exception
+    {
+        FOLFormula form = new FOLFormula();
+        String[] split = s.split("lub");
+        for (int i = 0; i < split.length; i++)
+            form.terms.add(FOLTerm.parse(split[i].trim(), names));
+        form.printFormula();
+        return form;
+    }
+    
+    public void printFormula()
+    {
+        System.out.println();
+        System.out.println("FORMULA:");
+        for(int i = 0; i< terms.size(); i++)
+        {
+            if(terms.get(i).notInverted)
+            {
+                System.out.println(terms.get(i).toString());
+            }
+            else
+            {
+                System.out.println("nie "+terms.get(i).toString());
+            }
+        }
+        for (FOLTerm t : terms)
+        {
+            if(t.notInverted)
+                System.out.println(t.element.toString());
+            else
+                System.out.println("nie "+t.element.toString());
+        }
+    }
+
+}

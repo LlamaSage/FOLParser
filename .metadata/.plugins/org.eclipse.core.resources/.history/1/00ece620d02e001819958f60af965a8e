@@ -1,0 +1,28 @@
+package objects;
+
+import java.util.ArrayList;
+import java.util.TreeMap;
+
+public class FOLFormula
+{
+    public String content;
+
+    public ArrayList<FOLTerm> terms = new ArrayList<FOLTerm>();
+
+    public FOLFormula(String content)
+    {
+        String[] split = content.split("lub");
+        for (int i = 0; i<split.length; i++)
+        {
+            terms.add(FOLTerm.parse(split[i]));
+        }
+    }
+    
+    
+    public static FOLFormula parse(String s, TreeMap<String, FOLElement> names)
+    {
+        
+    }
+    
+
+}

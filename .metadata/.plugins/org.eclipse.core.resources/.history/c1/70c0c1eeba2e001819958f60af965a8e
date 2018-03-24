@@ -1,0 +1,22 @@
+package objects;
+
+public class FOLFunctionPrototype extends FOLElement
+{
+    public int number;
+
+    public FOLFunctionPrototype(String name, int number)
+    {
+        super(name);
+        this.number = number;
+    }
+
+
+    @Override
+    public int compareTo(FOLElement e)
+    {
+        if (this.equals(e))
+            return 0;
+        return 2;
+    }
+
+}

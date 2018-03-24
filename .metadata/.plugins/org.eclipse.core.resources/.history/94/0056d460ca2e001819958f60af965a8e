@@ -1,0 +1,185 @@
+package parser;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.TreeMap;
+
+import objects.FOLElement;
+import objects.FOLFormula;
+import objects.FOLFunctionPrototype;
+import objects.FOLObject;
+import objects.FOLVariable;
+import exceptions.ForbiddenKeywordException;
+import exceptions.InvalidInputException;
+import exceptions.InvalidOverwriteException;
+
+public class FOLParser
+{
+    private String name = "[a-zA-Z]+[a-zA-Z0-9_]*";
+
+    private String number = "[0-9]+";
+
+    private String function = name + "\\(.+\\)"; // TODO: Fix expression (will require parser)
+
+    private String term = "(nie )?(" + function+"|"+name+")?"; //TODO: Add object expression (done?)
+
+    @SuppressWarnings("unused")
+    private String formula = term + "( lub " + term + ")*";
+
+    public void ParseFile(String fileLocation, ArrayList<FOLObject> objectList, ArrayList<FOLVariable> variableList, ArrayList<FOLFunctionPrototype> functions, ArrayList<FOLFormula> formulas, TreeMap<String, FOLElement> names) // DEFINITION
+    // of
+    // variables,
+    // objects
+    // and
+    // functions
+    {
+        try
+        {
+
+            String line = null;
+
+            FileReader freader = new FileReader(fileLocation);
+            BufferedReader reader = new BufferedReader(freader);
+            while ((line = reader.readLine()) != null) // read & match line
+            {
+                ParseSingleLine(line, objectList, variableList, functions, formulas, names);
+            }
+            reader.close();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void ParseSingleLine(String singleString, ArrayList<FOLObject> objects, ArrayList<FOLVariable> variables, ArrayList<FOLFunctionPrototype> functions, ArrayList<FOLFormula> formulas, TreeMap<String, FOLElement> names) throws ForbiddenKeywordException, InvalidOverwriteException, InvalidInputException
+    {
+        
+        if (singleString.matches("TELL object " + name))
+        {
+            AddOrOverwrite(FOLObject.parse(singleString), objects, variables, functions, formulas, names);
+        }
+        else if (singleString.matches("TELL variable " + name))
+        {
+            
+            AddOrOverwrite(FOLVariable.parse(singleString), objects, variables, functions, formulas, names);
+        }
+        else if (singleString.matches("TELL function " + name + " " + number))
+        {
+            
+            AddOrOverwrite(FOLFunctionPrototype.parse(singleString), objects, variables, functions, formulas, names);
+        }
+        else if (singleString.matches("TELL formula .*"))
+        {
+            formulas.add(new FOLFormula(singleString.substring(13)));
+        }
+        else
+        // If line matches none of the expected inputs
+        {
+            if (! (singleString.trim().isEmpty() || singleString.matches("//.*")))
+                throw new InvalidInputException("Unexpected input: "+singleString);
+        }
+    }
+
+    public void AddOrOverwrite(FOLElement element, ArrayList<FOLObject> objectList, ArrayList<FOLVariable> variableList, ArrayList<FOLFunctionPrototype> functions, ArrayList<FOLFormula> formulas, TreeMap<String, FOLElement> names) throws InvalidOverwriteException
+    {
+        //TODO: Do not override matching content
+        //TODO: TreeMap for name+type storage
+        
+        if(names.containsKey(element.name))
+        {
+            if(! element.equals(names.get(element.name)))
+            {
+                if(element.getClass() == names.get(element.name).getClass())
+                {
+                    
+                }
+            }
+        }
+        
+        
+        
+        
+        /*for (int i = 0; i < objectList.size(); i++) // CHECK objectList for
+                                                    // duplicate name
+        {
+            if (objectList.get(i).name.equals(element.name))
+            {
+                if (element instanceof FOLObject)
+                {
+                    objectList.set(i, (FOLObject) element); // duplicate of same
+                                                            // type gets
+                                                            // replaced
+                    return;
+                }
+                else
+                {
+                    throw new InvalidOverwriteException("Name \"" + element.name + "\" for Object already in use by Variable/Function");
+                }
+            }
+        }
+
+        for (int i = 0; i < variableList.size(); i++) // CHECK variableList for
+                                                      // duplicate name
+        {
+            if (variableList.get(i).name.equals(element.name))
+            {
+                if (element instanceof FOLVariable)
+                {
+                    variableList.set(i, (FOLVariable) element); // duplicate of
+                                                                // same type
+                                                                // gets replaced
+                    return;
+                }
+                else
+                {
+                    throw new InvalidOverwriteException("Name \"" + element.name + "\" for Variable already in use by Object/Function");
+                }
+            }
+        }
+
+        for (int i = 0; i < functions.size(); i++) // CHECK functionList for
+                                                      // duplicate name
+        {
+            if (functions.get(i).name.equals(element.name))
+            {
+                if (element instanceof FOLFunctionPrototype)
+                {
+                    if (((FOLFunctionPrototype) element).number != functions.get(i).number)
+                    {
+                        throw new InvalidOverwriteException("Function Overwrite \"" + element.name + "\" needs to have the same number of parameters");
+                    }
+
+                    functions.set(i, (FOLFunctionPrototype) element); // duplicate of
+                                                                // same type
+                                                                // gets replaced
+                    return;
+                }
+                else
+                {
+                    throw new InvalidOverwriteException("Name \"" + element.name + "\" for Function already in use by Variable/Object");
+                }
+            }
+        }
+
+        if (element instanceof FOLObject)
+        {
+            objectList.add((FOLObject) element);
+            return;
+        }
+        else if (element instanceof FOLVariable)
+        {
+            variableList.add((FOLVariable) element);
+            return;
+        }
+        else if (element instanceof FOLFunctionPrototype)
+        {
+            functions.add((FOLFunctionPrototype) element);
+            return;
+        }*/
+
+    }
+
+}

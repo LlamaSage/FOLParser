@@ -1,0 +1,38 @@
+package objects;
+
+import exceptions.ForbiddenKeywordException;
+import parser.FOLMatchEnum;
+
+public class FOLFunctionPrototype extends FOLElement
+{
+    public int number;
+
+    public FOLFunctionPrototype(String name, int number)
+    {
+        super(name);
+        this.number = number;
+    }
+
+    public FOLFunctionPrototype parse(String s) throws ForbiddenKeywordException
+    {
+        String[] split = s.split(" ");
+        if (split[2].equals("lub") || split[2].equals("nie"))
+        {
+            throw new ForbiddenKeywordException("Forbidden keyword \"" + split[2] + "\"");
+        }
+        if (Integer.parseInt(split[3]) <= 0)
+        {
+            throw new IllegalArgumentException("Illegal number value \"" + split[3] + "\"");
+        }
+        return new FOLFunctionPrototype(split[2], Integer.parseInt(split[3]));
+    }
+
+    @Override
+    public FOLMatchEnum compareTo(FOLElement e)
+    {
+        if (this==e)
+            return FOLMatchEnum.FullMatch;
+        return FOLMatchEnum.NoMatch;
+    }
+
+}

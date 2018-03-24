@@ -1,0 +1,46 @@
+package objects;
+
+import parser.FOLMatchEnum;
+
+public class FOLTerm
+{
+    public FOLElement element; // In practice you don't really expect it to be a
+                               // variable, but it can be either an object or a
+                               // function.
+
+    public boolean notInverted;
+
+    public FOLTerm(boolean doNotInvert)
+    {
+        this.notInverted = doNotInvert;
+    }
+
+    public FOLMatchEnum compareTo(FOLTerm term)
+    {
+        if (this.notInverted == term.notInverted)
+            return element.compareTo(term.element);
+
+        return FOLMatchEnum.NoMatch;
+    }
+
+    // TODO: Compare
+    // if the names are the same and all of the arguments do not match it is a
+    // partial match only when all the arguments that do not match are also a
+    // partial match.
+    // f(g(A)) and f(g(c)), f matches partially because function g matches
+    // partially, because A matches partially with c.
+
+    public static FOLTerm parse(String s)
+    {
+        // FOLTerm term = new FOLTerm();
+        if (s.startsWith("nie "))
+        {
+            s = s.substring(3).trim();
+        }
+        else
+        {
+
+        }
+        return null;
+    }
+}

@@ -1,0 +1,71 @@
+package objects;
+
+import java.util.ArrayList;
+
+import parser.FOLMatchEnum;
+import exceptions.InvalidInputException;
+
+public class FOLFunction extends FOLElement
+{
+    public int number;
+
+    public FOLElement[] arguments;
+
+    public FOLFunctionPrototype prototype;
+
+    // TODO: Add Arguments
+
+    public FOLFunction(String name, FOLFunctionPrototype prototype, int number, FOLElement[] arguments, ArrayList<FOLFunctionPrototype> prototypes) throws InvalidInputException
+    {
+        super(name);
+        this.prototype = prototype;
+        this.number = number;
+        this.arguments = arguments;
+
+        boolean hasNoPrototype = true;
+        for (FOLFunctionPrototype p : prototypes)
+        {
+            if (this.name.equals(p.name) && this.number == p.number)
+                hasNoPrototype = false;
+        }
+
+        if (hasNoPrototype)
+            throw new InvalidInputException("Cannot initiate function " + name + ". No matching prototype declaration found.");
+
+    }
+
+    @Override
+    public FOLMatchEnum compareTo(FOLElement e)
+    // a) f(...) is never a match with g(...), no matter what the arguments are.
+    // b) if the names are the same and all of the arguments are the same it's a
+    // full match.
+    // c) if the names are the same and all of the arguments do not match it is
+    // a partial match only when all the arguments that do not match are also a
+    // partial match.
+    // d) otherwise it is not a match.
+    {
+        if (e instanceof FOLFunction)
+        {
+            if (this.equals(e))
+            {
+                boolean hasPartialMatches = false;
+                for (int i = 0; i < arguments.length; i++)
+                {
+                    if (arguments[i].compareTo(((FOLFunction) e).arguments[i]) == FOLMatchEnum.PartialMatch)
+                    {
+                        hasPartialMatches = true;
+                    }
+                    else if (!(arguments[i].compareTo(((FOLFunction) e).arguments[i]) == FOLMatchEnum.FullMatch))
+                    {
+                        return FOLMatchEnum.NoMatch;
+                    }
+                }
+                if (hasPartialMatches)
+                    return 1;
+                return 0;
+            }
+            // TODO: Flesh out
+        }
+        return 2;
+    }
+}

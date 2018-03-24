@@ -1,0 +1,87 @@
+package objects;
+
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.TreeMap;
+
+import exceptions.CouldNotFindDefinitionException;
+import exceptions.InvalidInputException;
+import parser.FOLMatchEnum;
+
+public class FOLTerm
+{
+    public FOLElement element; // In practice you don't really expect it to be a
+                               // variable, but it can be either an object or a
+                               // function.
+
+    public boolean notInverted;
+
+    public FOLTerm()
+    {
+
+    }
+
+    public FOLMatchEnum compareTo(FOLTerm term)
+    {
+        if (this.notInverted == term.notInverted)
+            return element.compareTo(term.element);
+
+        return FOLMatchEnum.NoMatch;
+    }
+
+    // TODO: Compare
+    // if the names are the same and all of the arguments do not match it is a
+    // partial match only when all the arguments that do not match are also a
+    // partial match.
+    // f(g(A)) and f(g(c)), f matches partially because function g matches
+    // partially, because A matches partially with c.
+
+    public static FOLTerm parse(String s, TreeMap<String, FOLElement> names) throws InvalidInputException, CouldNotFindDefinitionException
+    {
+        FOLTerm term = new FOLTerm();
+
+        if (s.startsWith("nie "))
+        {
+            s = s.substring(3).trim();
+            term.notInverted = false;
+        }
+        else
+        {
+            term.notInverted = true;
+        }
+
+        s = s.replace('(', ' ').replace(')', ' ').replace(',', ' ');
+        String[] split = s.split(" +");
+
+        Queue<String> stringQ = new LinkedList<String>();
+        for (int i = 0; i < split.length; i++)
+        {
+            stringQ.offer(split[i]);
+        }
+
+        term.element = FOLTerm.parseElement(stringQ, names);
+        if (!stringQ.isEmpty())
+            throw new InvalidInputException("Malformed term");
+        return term;
+    }
+
+    public static FOLElement parseElement(Queue<String> q, TreeMap<String, FOLElement> names) throws CouldNotFindDefinitionException
+    {
+        String s = q.poll();
+        FOLElement element = names.get(s);
+        if (element == null)
+            throw new CouldNotFindDefinitionException();
+        if (element instanceof FOLVariable || element instanceof FOLObject)
+            return element;
+        if (element instanceof FOLFunctionPrototype)
+        {
+            FOLFunctionPrototype functionElement = (FOLFunctionPrototype) element;
+            FOLElement[] arguments = new FOLElement[functionElement.number]; 
+            for(int i = 0; i<arguments.length; i++)
+            {
+                arguments[i] = FOLTerm.parseElement(q, names);
+            }
+        }
+        return null;
+    }
+}

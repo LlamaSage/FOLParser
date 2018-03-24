@@ -1,0 +1,24 @@
+package objects;
+
+public class FOLVariable extends FOLElement
+{
+    
+    public FOLVariable(String name)
+    {
+        super(name);
+    }
+
+    @Override
+    public int compareTo(FOLElement e)
+    {
+        if (e instanceof FOLVariable)
+        {
+            if (this.equals(e))
+                return 0;
+            
+            
+        }
+
+        return 1;
+    }
+}

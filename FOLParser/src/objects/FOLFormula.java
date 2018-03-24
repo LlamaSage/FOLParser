@@ -1,9 +1,47 @@
 package objects;
 
-public class FOLFormula extends FOLElement
+import java.util.ArrayList;
+import java.util.TreeMap;
+
+public class FOLFormula
 {
-    public FOLFormula(String name)
+
+    public ArrayList<FOLTerm> terms = new ArrayList<FOLTerm>();
+
+    public FOLFormula()
     {
-        this.name = name;
+
     }
+
+    public static FOLFormula parse(String s, TreeMap<String, FOLElement> names) throws Exception
+    {
+        FOLFormula form = new FOLFormula();
+        String[] split = s.split("lub");
+        for (int i = 0; i < split.length; i++)
+            form.terms.add(FOLTerm.parse(split[i].trim(), names));
+        //form.printFormula(); TODO: Remove
+        return form;
+    }
+
+    public void printFormula()
+    {
+        System.out.print("Formula: ");
+        String s = "";
+        for (int i = 0; i < terms.size(); i++)
+        {
+            if (!terms.get(i).notInverted)
+            {
+                s += "nie ";
+            }
+            if(terms.get(i).element instanceof FOLFunction)
+            s += (terms.get(i).toString());
+            else
+                s+= terms.get(i).element.name;
+            if(i != terms.size()-1)
+                s += " lub ";
+
+        }
+        System.out.println(s);
+    }
+
 }

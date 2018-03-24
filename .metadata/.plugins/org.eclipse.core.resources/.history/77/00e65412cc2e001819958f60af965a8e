@@ -1,0 +1,20 @@
+package objects;
+
+import java.util.ArrayList;
+
+public class FOLFormula
+{
+    public String content;
+
+    public ArrayList<FOLElement> terms = new ArrayList<FOLElement>();
+
+    public FOLFormula(String content)
+    {
+        this.content = content;
+    }
+
+    public boolean equals(Object o)
+    {
+        return true;
+    }
+}

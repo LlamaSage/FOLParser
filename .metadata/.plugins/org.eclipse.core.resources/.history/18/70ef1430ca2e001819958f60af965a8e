@@ -1,0 +1,14 @@
+package parser;
+
+import objects.FOLFunctionPrototype;
+
+public class Main
+{
+    public static void main(String[] args)
+    {
+        System.out.println(new FOLFunctionPrototype("abc", 2).getClass());
+        RunTimeMethods run = new RunTimeMethods();
+        run.FileInput();
+        run.printListToConsole(4);
+    }
+}

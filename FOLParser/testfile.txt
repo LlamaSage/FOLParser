@@ -1,3 +1,13 @@
-TELL object asd
-TELL function sd 5
-TELL function sd 4
+TELL object mrl
+TELL object mantis
+TELL object crab
+TELL function ojciec 2
+TELL function bracia 2
+TELL variable A
+TELL variable B
+TELL variable C
+
+
+TELL formula nie ojciec(A, B) lub nie ojciec(A, C) lub bracia(B, C)
+TELL formula ojciec(mrl, mantis)
+TELL formula ojciec(mrl, crab)

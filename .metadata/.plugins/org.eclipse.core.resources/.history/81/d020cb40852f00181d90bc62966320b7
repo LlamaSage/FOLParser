@@ -1,0 +1,16 @@
+package parser;
+
+public class Main
+{
+    public static void main(String[] args)
+    {
+        RunTimeMethods run = new RunTimeMethods();
+        run.FileInput();
+        run.printListToConsole();
+    }
+
+    // TODO: Sort formula list ->Sort by number of terms. -> Make it sort after
+    // every added formula using insertion sort please.
+    // TODO: Getting the variable stuff
+    // TODO: Setting the variable stuff
+}

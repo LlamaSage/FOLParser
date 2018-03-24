@@ -1,0 +1,11 @@
+package parser;
+
+public enum FOLMatchEnum
+{
+    FOLMatchEnum()
+    {
+        NoMatch,
+        PartialMatch,
+        FullMatch
+    }
+}

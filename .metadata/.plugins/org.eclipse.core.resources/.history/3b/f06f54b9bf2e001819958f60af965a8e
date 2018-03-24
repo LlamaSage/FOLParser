@@ -1,0 +1,8 @@
+package parser;
+
+public enum FOLClassEnum
+{
+    FunctionPrototype,
+    Object,
+    Variable
+}

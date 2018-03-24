@@ -1,0 +1,28 @@
+package objects;
+
+import parser.FOLMatchEnum;
+
+public abstract class FOLElement
+{
+    public String name;
+
+    public FOLElement(String name)
+    {
+        this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this.getClass() != o.getClass() || ! (this.name.equals(((FOLElement) o).name)))
+            return false;
+        
+
+        return false;
+    }
+
+    public abstract FOLMatchEnum compareTo(FOLElement e);
+    // 0 = full match
+    // 1 = partial match
+    // 2 = no match
+}

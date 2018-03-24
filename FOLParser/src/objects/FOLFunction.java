@@ -1,13 +1,92 @@
 package objects;
 
+import parser.FOLMatchEnum;
+
 public class FOLFunction extends FOLElement
 {
-    public int number;
+    public FOLElement[] arguments;
 
-    public FOLFunction(String name, int number)
+    public FOLFunctionPrototype prototype;
+
+    // TODO: Add Arguments
+
+    public FOLFunction(String name, FOLFunctionPrototype prototype, FOLElement[] arguments)
     {
-        this.name = name;
-        this.number = number;
+        super(name);
+        this.prototype = prototype;
+        this.arguments = arguments;
     }
 
+    public FOLElement[] copyArguments() throws Exception    //TODO: Check
+    {
+        FOLElement[] newCopy = new FOLElement[this.arguments.length];
+        for(int i = 0; i< newCopy.length; i++)
+        {
+            if(this.arguments[i] instanceof FOLObject || this.arguments[i] instanceof FOLVariable)
+            {
+                newCopy[i] = this.arguments[i];
+            }
+            else if(this.arguments[i] instanceof FOLFunction)
+            {
+                newCopy[i] = new FOLFunction(this.arguments[i].name, ((FOLFunction) this.arguments[i]).prototype, ((FOLFunction) this.arguments[i]).copyArguments());
+            }
+            else
+            {
+                throw new Exception();  //TODO: Fix
+            }
+        }
+        return newCopy;
+    }
+    
+
+    @Override
+    public FOLMatchEnum compareTo(FOLElement e)
+    {
+        if (e instanceof FOLFunction)
+        {
+            FOLFunction func = (FOLFunction) e;
+            if (this.prototype == func.prototype)
+            {
+                FOLMatchEnum funcMatch = FOLMatchEnum.FullMatch;
+                for (int i = 0; i < arguments.length; i++)
+                {
+                    switch (this.arguments[i].compareTo(func.arguments[i]))
+                    {
+                        case FullMatch:
+
+                            break;
+
+                        case PartialMatch:
+                            funcMatch = FOLMatchEnum.PartialMatch;
+                            break;
+
+                        case NoMatch:
+                            return FOLMatchEnum.NoMatch;
+                    }
+                }
+                return funcMatch;
+            }
+        }
+
+        return FOLMatchEnum.NoMatch;
+    }
+    
+    public String toString()
+    {
+        String result = this.name+"(";
+        for (int i= 0; i<arguments.length; i++)
+        {
+            if(arguments[i] instanceof FOLFunction)
+            result+= arguments[i].toString();
+            else
+                result += arguments[i].name;
+            if(i!=arguments.length-1)
+            {
+                result+=", ";
+            }
+        }
+        
+        result+=")";
+        return result;
+    }
 }

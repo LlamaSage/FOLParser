@@ -1,0 +1,24 @@
+package objects;
+
+public class FOLFunctionPrototype extends FOLElement
+{
+    public int number;
+
+    public FOLFunctionPrototype(String name, int number)
+    {
+        super(name);
+        this.number = number;
+    }
+
+    // The Prototype doesn't need to extend FOLElement.
+    // It's only used for definition storage.
+    // Which are separate per class without common supertype.
+
+    @Override
+    public int compareTo(FOLElement e)
+    {
+        // TODO Auto-generated method stub
+        return 2;
+    }
+
+}

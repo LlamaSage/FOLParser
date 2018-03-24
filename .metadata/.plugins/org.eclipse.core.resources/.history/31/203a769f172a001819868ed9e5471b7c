@@ -1,0 +1,12 @@
+package objects;
+
+public class FOLFunctionPrototype extends FOLElement
+{
+
+    public FOLFunctionPrototype(String name)
+    {
+        super(name);
+        
+    }
+
+}
