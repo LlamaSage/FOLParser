@@ -1,0 +1,34 @@
+package parser;
+
+import java.util.TreeMap;
+
+import objects.FOLElement;
+import objects.FOLVariable;
+
+public class Main
+{
+    public static void main(String[] args)
+    {
+        RunTimeMethods run = new RunTimeMethods();
+        run.FileInput();
+        TreeMap<FOLElement, FOLElement> subs = new TreeMap<FOLElement, FOLElement>();
+        subs.put(run.names.get("A"), run.names.get("B"));
+        try
+        {
+            run.formulas.get(0).terms.get(0).substitution(subs);
+        }
+        catch (Exception e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        run.printListToConsole();
+    }
+
+    // TODO: Sort formula list ->Sort by number of terms. -> Make it sort after
+    // every added formula using insertion sort please. You can even make an
+    // assumption that it's insert sort + everything except the last element is
+    // sorted already. DONE
+    // TODO: Getting the variable stuff
+    // TODO: Setting the variable stuff
+}

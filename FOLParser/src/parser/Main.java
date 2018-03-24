@@ -6,6 +6,7 @@ public class Main
     {
         RunTimeMethods run = new RunTimeMethods();
         run.FileInput();
+        
         run.printListToConsole();
     }
 

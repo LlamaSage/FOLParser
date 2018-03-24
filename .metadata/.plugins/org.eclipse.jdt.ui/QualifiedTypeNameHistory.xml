@@ -4,12 +4,15 @@
 <fullyQualifiedTypeName name="exceptions.InvalidOverwriteException"/>
 <fullyQualifiedTypeName name="parser.FOLMatchEnum"/>
 <fullyQualifiedTypeName name="objects.FOLFunctionPrototype"/>
-<fullyQualifiedTypeName name="objects.FOLElement"/>
 <fullyQualifiedTypeName name="java.util.StringTokenizer"/>
-<fullyQualifiedTypeName name="java.util.TreeMap"/>
 <fullyQualifiedTypeName name="java.util.Queue"/>
 <fullyQualifiedTypeName name="java.util.LinkedList"/>
 <fullyQualifiedTypeName name="exceptions.InvalidInputException"/>
 <fullyQualifiedTypeName name="java.util.Iterator"/>
 <fullyQualifiedTypeName name="java.util.ArrayList"/>
+<fullyQualifiedTypeName name="objects.FOLTerm"/>
+<fullyQualifiedTypeName name="java.util.TreeMap"/>
+<fullyQualifiedTypeName name="objects.FOLElement"/>
+<fullyQualifiedTypeName name="objects.FOLVariable"/>
+<fullyQualifiedTypeName name="java.util.Map"/>
 </qualifiedTypeNameHistroy>
