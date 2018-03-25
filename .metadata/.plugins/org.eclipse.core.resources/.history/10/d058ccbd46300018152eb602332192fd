@@ -1,0 +1,15 @@
+package objects;
+
+import java.util.Comparator;
+
+public class FOLElementComparator implements Comparator<FOLElement>
+{
+
+    @Override
+    public int compare(String arg0, String arg1)
+    {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+    
+}

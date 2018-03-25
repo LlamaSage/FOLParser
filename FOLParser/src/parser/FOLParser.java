@@ -9,9 +9,15 @@ import objects.FOLElement;
 import objects.FOLFormula;
 import objects.FOLFunctionPrototype;
 import objects.FOLObject;
+import objects.FOLTerm;
 import objects.FOLVariable;
+import exceptions.CouldNotFindDefinitionException;
+import exceptions.ForbiddenKeywordException;
 import exceptions.InvalidInputException;
 import exceptions.InvalidOverwriteException;
+import exceptions.SkolemnException;
+import exceptions.StringQueueEmptyException;
+import exceptions.UnrecognizedInputException;
 
 public class FOLParser
 {
@@ -31,7 +37,9 @@ public class FOLParser
     @SuppressWarnings("unused")
     private String formula = term + "( lub " + term + ")*";
     
-    
+
+    public boolean debugModeEnabled = false;
+    public int maxRecursionDepth = 10;
     
     
 
@@ -62,7 +70,7 @@ public class FOLParser
 
     }
 
-    public void ParseSingleLine(String singleString, TreeMap<String, FOLElement> names, ArrayList<FOLFormula> formulas) throws Exception
+    public void ParseSingleLine(String singleString, TreeMap<String, FOLElement> names, ArrayList<FOLFormula> formulas) throws InvalidInputException, InvalidOverwriteException, ForbiddenKeywordException, StringQueueEmptyException, CouldNotFindDefinitionException, UnrecognizedInputException, SkolemnException
     {
 
         if (singleString.matches("TELL object " + name))
@@ -85,11 +93,41 @@ public class FOLParser
             formulas.add(FOLFormula.parse(singleString.substring(13), names));
             insertionSortFormulas(formulas);
         }
-        else
+        else if (singleString.matches("DEBUG ON"))
+        {
+            System.out.println("DEBUG MODE ON");
+            this.debugModeEnabled = true;
+        }
+        else if (singleString.matches("DEBUG OFF"))
+        {
+            System.out.println("DEBUG MODE OFF");
+            this.debugModeEnabled = false;
+        }
+        else if (singleString.matches("REKURSJA "+number))
+        {
+            System.out.println("OLD RECURSION MAXDEPTH: "+ this.maxRecursionDepth);
+            this.maxRecursionDepth = Integer.parseInt(singleString.substring(9));
+            System.out.println("NEW RECURSION MAXDEPTH: "+ this.maxRecursionDepth);
+            
+        }
+        else if (singleString.matches("ASK "+term))
+        {
+            FOLTerm testTerm = FOLTerm.parse(singleString.substring(4), names);
+            if (testTerm.element.verifyAskTerm((FOLVariable) (names.get("S"))))
+            {
+                System.out.println("Successful ask");
+            }
+            else
+            {
+                System.out.println("Something went wrong!");
+
+            }
+        }
         // If line matches none of the expected inputs
+        else
         {
             if (!(singleString.trim().isEmpty() || singleString.matches("//.*")))
-                throw new InvalidInputException("Unexpected input: " + singleString);
+                throw new UnrecognizedInputException("Unexpected input: " + singleString);
         }
     }
 

@@ -2,17 +2,24 @@
 <qualifiedTypeNameHistroy>
 <fullyQualifiedTypeName name="java.nio.file.Path"/>
 <fullyQualifiedTypeName name="exceptions.InvalidOverwriteException"/>
-<fullyQualifiedTypeName name="parser.FOLMatchEnum"/>
-<fullyQualifiedTypeName name="objects.FOLFunctionPrototype"/>
 <fullyQualifiedTypeName name="java.util.StringTokenizer"/>
 <fullyQualifiedTypeName name="java.util.Queue"/>
-<fullyQualifiedTypeName name="java.util.LinkedList"/>
-<fullyQualifiedTypeName name="exceptions.InvalidInputException"/>
 <fullyQualifiedTypeName name="java.util.Iterator"/>
 <fullyQualifiedTypeName name="java.util.ArrayList"/>
-<fullyQualifiedTypeName name="objects.FOLTerm"/>
-<fullyQualifiedTypeName name="java.util.TreeMap"/>
-<fullyQualifiedTypeName name="objects.FOLElement"/>
 <fullyQualifiedTypeName name="objects.FOLVariable"/>
 <fullyQualifiedTypeName name="java.util.Map"/>
+<fullyQualifiedTypeName name="objects.FOLFormula"/>
+<fullyQualifiedTypeName name="java.util.TreeMap"/>
+<fullyQualifiedTypeName name="objects.FOLElement"/>
+<fullyQualifiedTypeName name="java.util.Comparator"/>
+<fullyQualifiedTypeName name="java.util.HashMap"/>
+<fullyQualifiedTypeName name="objects.FOLFunction"/>
+<fullyQualifiedTypeName name="objects.FOLFunctionPrototype"/>
+<fullyQualifiedTypeName name="exceptions.InvalidInputException"/>
+<fullyQualifiedTypeName name="exceptions.UnrecognizedInputException"/>
+<fullyQualifiedTypeName name="java.util.LinkedList"/>
+<fullyQualifiedTypeName name="parser.FOLMatchEnum"/>
+<fullyQualifiedTypeName name="objects.FOLTerm"/>
+<fullyQualifiedTypeName name="exceptions.InvalidCopyException"/>
+<fullyQualifiedTypeName name="exceptions.SkolemnException"/>
 </qualifiedTypeNameHistroy>

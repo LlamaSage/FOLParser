@@ -31,10 +31,22 @@ public class FOLVariable extends FOLElement
         }
         return FOLMatchEnum.PartialMatch;
     }
+    
+    @Override
+    public FOLMatchEnum strictCompareTo(FOLElement e)
+    {
+        if (e instanceof FOLVariable)
+        {
+            if (this == e)
+                return FOLMatchEnum.FullMatch;
+        }
+        return FOLMatchEnum.NoMatch;
+    }
 
     public String toString()
     {
         return "Variable: "+super.toString();
     }
+
 
 }

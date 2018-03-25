@@ -1,0 +1,43 @@
+package objects;
+
+import exceptions.ForbiddenKeywordException;
+import parser.FOLMatchEnum;
+
+public class FOLObject extends FOLElement
+{
+
+    public FOLObject(String name)
+    {
+        super(name);
+    }
+
+    public static FOLObject parse(String s) throws ForbiddenKeywordException
+    {
+        String[] split = s.split(" ");
+        if (split[2].equals("lub") || split[2].equals("nie"))
+        {
+            throw new ForbiddenKeywordException("Forbidden keyword \"" + split[2] + "\"");
+        }
+        return new FOLObject(split[2]);
+    }
+
+    @Override
+    public FOLMatchEnum compareTo(FOLElement e)
+    {
+        if (this == e)
+            return FOLMatchEnum.FullMatch;
+        return FOLMatchEnum.NoMatch;
+    }
+    
+    @Override
+    public FOLMatchEnum strictCompareTo(FOLElement e)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public String toString()
+    {
+        return "Object: "+super.toString();
+    }
+}

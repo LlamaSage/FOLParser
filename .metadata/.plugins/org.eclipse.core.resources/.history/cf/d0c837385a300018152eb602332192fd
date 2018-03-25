@@ -1,0 +1,15 @@
+package exceptions;
+
+public class InvalidTermCopyException extends Exception
+{
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -5496580093095644337L;
+
+    public InvalidTermCopyException(String s)
+    {
+        super(s);
+    }
+}

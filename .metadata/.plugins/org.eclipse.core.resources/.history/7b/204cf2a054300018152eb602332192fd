@@ -1,0 +1,9 @@
+package parser;
+
+import java.util.LinkedList;
+import objects.FOLTerm;
+
+public class FOLResolutionEngine
+{
+    public LinkedList<FOLTerm> compareToTermsList = new LinkedList<FOLTerm>();
+}

@@ -1,3 +1,5 @@
+DEBUG ON
+
 TELL object mrl
 TELL object mantis
 TELL object crab
@@ -7,7 +9,7 @@ TELL variable A
 TELL variable B
 TELL variable C
 
-
 TELL formula nie ojciec(A, B) lub nie ojciec(A, C) lub bracia(B, C)
 TELL formula ojciec(mrl, mantis)
 TELL formula ojciec(mrl, crab)
+REKURSJA 33

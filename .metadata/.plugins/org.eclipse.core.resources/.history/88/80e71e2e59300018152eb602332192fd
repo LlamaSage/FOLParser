@@ -1,0 +1,165 @@
+package parser;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.TreeMap;
+
+import objects.FOLElement;
+import objects.FOLFormula;
+import objects.FOLFunctionPrototype;
+import objects.FOLObject;
+import objects.FOLTerm;
+import objects.FOLVariable;
+import exceptions.CouldNotFindDefinitionException;
+import exceptions.ForbiddenKeywordException;
+import exceptions.InvalidInputException;
+import exceptions.InvalidOverwriteException;
+import exceptions.StringQueueEmptyException;
+import exceptions.UnrecognizedInputException;
+
+public class FOLParser
+{
+    private String name = "[a-zA-Z]+[a-zA-Z0-9_]*";
+
+    private String number = "[0-9]+";
+
+    private String function = name + "\\(.+\\)"; // TODO: Fix expression (will
+                                                 // require parser)
+
+    private String term = "(nie )?(" + function + "|" + name + ")?"; // TODO:
+                                                                     // Add
+                                                                     // object
+                                                                     // expression
+                                                                     // (done?)
+
+    @SuppressWarnings("unused")
+    private String formula = term + "( lub " + term + ")*";
+    
+
+    public boolean debugModeEnabled = false;
+    public int maxRecursionDepth = 10;
+    
+    
+
+    public void ParseFile(String fileLocation, TreeMap<String, FOLElement> names, ArrayList<FOLFormula> formulas) // DEFINITION
+    // of
+    // variables,
+    // objects
+    // and
+    // functions
+    {
+        try
+        {
+
+            String line = null;
+
+            FileReader freader = new FileReader(fileLocation);
+            BufferedReader reader = new BufferedReader(freader);
+            while ((line = reader.readLine()) != null) // read & match line
+            {
+                ParseSingleLine(line, names, formulas);
+            }
+            reader.close();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void ParseSingleLine(String singleString, TreeMap<String, FOLElement> names, ArrayList<FOLFormula> formulas) throws InvalidInputException, InvalidOverwriteException, ForbiddenKeywordException, StringQueueEmptyException, CouldNotFindDefinitionException, UnrecognizedInputException
+    {
+
+        if (singleString.matches("TELL object " + name))
+        {
+            AddOrOverwrite(FOLObject.parse(singleString), names);
+        }
+        else if (singleString.matches("TELL variable " + name))
+        {
+
+            AddOrOverwrite(FOLVariable.parse(singleString), names);
+        }
+        else if (singleString.matches("TELL function " + name + " " + number))
+        {
+
+            AddOrOverwrite(FOLFunctionPrototype.parse(singleString), names);
+        }
+        else if (singleString.matches("TELL formula .*"))
+        {
+            //TODO: Keep an eye on
+            formulas.add(FOLFormula.parse(singleString.substring(13), names));
+            insertionSortFormulas(formulas);
+        }
+        else if (singleString.matches("DEBUG ON"))
+        {
+            System.out.println("DEBUG MODE ON");
+            this.debugModeEnabled = true;
+        }
+        else if (singleString.matches("DEBUG OFF"))
+        {
+            System.out.println("DEBUG MODE OFF");
+            this.debugModeEnabled = false;
+        }
+        else if (singleString.matches("REKURSJA "+number))
+        {
+            System.out.println("OLD RECURSION MAXDEPTH: "+ this.maxRecursionDepth);
+            this.maxRecursionDepth = Integer.parseInt(singleString.substring(9));
+            System.out.println("NEW RECURSION MAXDEPTH: "+ this.maxRecursionDepth);
+            
+        }
+        else if (singleString.matches("ASK "+term))
+        {
+            FOLTerm testFormula = FOLTerm.parse(singleString.substring(4), names);
+            if (testFormula.terms.size() == 1 && (testFormula.terms.get(0).element.equals(names.get("S")) && names.get("S") instanceof FOLVariable))
+            {
+                System.out.println("Successful ask");
+            }
+            else
+            {
+                System.out.println("Something went wrong!");
+
+            }
+        }
+        // If line matches none of the expected inputs
+        else
+        {
+            if (!(singleString.trim().isEmpty() || singleString.matches("//.*")))
+                throw new UnrecognizedInputException("Unexpected input: " + singleString);
+        }
+    }
+
+    public void AddOrOverwrite(FOLElement element, TreeMap<String, FOLElement> names) throws InvalidOverwriteException
+    {
+
+        if (names.containsKey(element.name))
+        {
+            if (!element.equals(names.get(element.name)))
+                throw new InvalidOverwriteException("Invalid Overwrite for name " + element.name + ".");
+        }
+        else
+            names.put(element.name, element);
+
+    }
+    
+    private void insertionSortFormulas(ArrayList<FOLFormula> formulas) //TODO: Check
+    {
+        int size = formulas.size();
+        if(size<2)
+            return;
+        for (int i=0; i<size-1; i++)
+        {
+            if(formulas.get(size-1).terms.size()<=formulas.get(i).terms.size())
+            {
+                formulas.add(i, formulas.get(size-1));
+                formulas.remove(size);
+                return;
+            }
+        }
+        
+    }
+    
+    
+    
+}

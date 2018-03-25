@@ -1,0 +1,111 @@
+package parser;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Scanner;
+import java.util.TreeMap;
+
+import exceptions.CouldNotFindDefinitionException;
+import exceptions.ForbiddenKeywordException;
+import exceptions.InvalidInputException;
+import exceptions.InvalidOverwriteException;
+import exceptions.StringQueueEmptyException;
+import exceptions.UnrecognizedInputException;
+import objects.*;
+
+public class RunTimeMethods
+{
+
+    public TreeMap<String, FOLElement> names = new TreeMap<String, FOLElement>();
+
+    public ArrayList<FOLFormula> formulas = new ArrayList<FOLFormula>();
+
+    // 0 = objects
+    // 1 = variables
+    // 2 = functions
+    // 3 = terms
+
+    FOLParser parser = new FOLParser();
+
+    Scanner scan = new Scanner(System.in);
+
+    public void FileInput()
+    {
+        // Scanner scan = new Scanner(System.in);
+
+        System.out.println("Input file name/location:");
+        Path path = Paths.get(scan.nextLine());
+        while (Files.notExists(path))
+        {
+            System.out.println("Cannot find file, try again");
+            path = Paths.get(scan.nextLine());
+        }
+        System.out.println();
+        parser.ParseFile(path.toString(), names, formulas);
+
+        // scan.close();
+    }
+
+    public void waitForInput() throws InvalidOverwriteException, ForbiddenKeywordException, InvalidInputException, StringQueueEmptyException, CouldNotFindDefinitionException
+
+    {
+        // Scanner scan = new Scanner(System.in);
+
+        System.out.println("Awaiting Input:");
+        String s = scan.nextLine();
+        System.out.println();
+        if (s.equals("file"))
+        {
+            this.FileInput();
+        }
+        else if (s.equals("exit") || s.equals("quit"))
+        {
+            scan.close();
+            System.exit(0);
+        }
+        else if (s.equals("help"))
+        {
+            System.out.println("\"file\" will allow you to input a file location to read from");
+            System.out.println("exit / quit will end the application");
+            System.out.println("TELL [variable/object] [name] will enter a new definition");
+            System.out.println("TELL function [name] [number of arguments] will enter a new function definition");
+            System.out.println("TELL formula [formula] will enter a new formula");
+        }
+        else
+        {
+            try
+            {
+                parser.ParseSingleLine(s, names, formulas);
+            }
+            catch (UnrecognizedInputException e)
+            {
+                System.out.println("Invalid input, type \"help\" for help");
+            }
+        }
+        System.out.println();
+        waitForInput();
+    }
+
+    public void printListToConsole()
+    {
+        Iterator<String> iterator = names.keySet().iterator();
+
+        while (iterator.hasNext())
+        {
+            String key = iterator.next().toString();
+            FOLElement value = names.get(key);
+
+            System.out.println(value.toString());
+        }
+        System.out.println();
+
+        for (FOLFormula form : formulas)
+        {
+            form.printFormula();
+        }
+        System.out.println();
+    }
+}

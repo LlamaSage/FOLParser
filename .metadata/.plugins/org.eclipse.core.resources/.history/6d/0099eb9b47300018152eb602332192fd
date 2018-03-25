@@ -1,0 +1,64 @@
+package objects;
+
+import java.util.HashMap;
+import parser.FOLMatchEnum;
+
+public abstract class FOLElement
+{
+    public String name;
+
+    public FOLElement(String name)
+    {
+        this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this.getClass() != o.getClass() || !(this.name.equals(((FOLElement) o).name)))
+            return false;
+        return true;
+    }
+
+    public String toString()
+    {
+        return this.name;
+    }
+
+    // TODO: Not done yet, probably doesn't work yet
+    public FOLElement substitute(HashMap<FOLElement, FOLElement> subs) throws Exception // TODO:
+                                                                                        // Check
+    {
+        if (this instanceof FOLVariable)
+        {
+            FOLElement valueInMap = subs.get(this);
+
+            if (valueInMap != null)
+            {
+                if (valueInMap instanceof FOLObject || valueInMap instanceof FOLVariable)
+                    return valueInMap;
+                else if (valueInMap instanceof FOLFunction)
+                {
+                    return new FOLFunction(valueInMap.name, ((FOLFunction) valueInMap).prototype, ((FOLFunction) valueInMap).copyArguments());
+                }
+            }
+        }
+        else if (this instanceof FOLFunction)
+        {
+            FOLFunction func = (FOLFunction) this;
+            for (int i = 0; i < func.arguments.length; i++)
+            {
+                if (func.arguments[i] instanceof FOLVariable)
+                {
+                    func.arguments[i] = func.arguments[i].substitute(subs);
+
+                }
+            }
+        }
+        return this;
+        
+    }
+
+    public abstract FOLMatchEnum compareTo(FOLElement e);
+
+}

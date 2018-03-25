@@ -8,13 +8,22 @@ import java.util.Iterator;
 import java.util.Scanner;
 import java.util.TreeMap;
 
+import exceptions.CouldNotFindDefinitionException;
+import exceptions.ForbiddenKeywordException;
+import exceptions.InvalidInputException;
+import exceptions.InvalidOverwriteException;
+import exceptions.SkolemnException;
+import exceptions.StringQueueEmptyException;
+import exceptions.UnrecognizedInputException;
 import objects.*;
 
 public class RunTimeMethods
 {
-    
+
     public TreeMap<String, FOLElement> names = new TreeMap<String, FOLElement>();
+
     public ArrayList<FOLFormula> formulas = new ArrayList<FOLFormula>();
+
     // 0 = objects
     // 1 = variables
     // 2 = functions
@@ -22,9 +31,10 @@ public class RunTimeMethods
 
     FOLParser parser = new FOLParser();
 
+    Scanner scan = new Scanner(System.in);
+
     public void FileInput()
     {
-        Scanner scan = new Scanner(System.in);
 
         System.out.println("Input file name/location:");
         Path path = Paths.get(scan.nextLine());
@@ -33,44 +43,71 @@ public class RunTimeMethods
             System.out.println("Cannot find file, try again");
             path = Paths.get(scan.nextLine());
         }
-
+        System.out.println();
         parser.ParseFile(path.toString(), names, formulas);
-
-        scan.close();
+    }
+    
+    public void setup() throws InvalidInputException, InvalidOverwriteException, ForbiddenKeywordException, StringQueueEmptyException, CouldNotFindDefinitionException, UnrecognizedInputException, SkolemnException
+    {
+        parser.ParseSingleLine("TELL variable S", names, formulas);
     }
 
-    public void waitForInput() //TODO: Just a proxy for the meantime
+    public void waitForInput() throws InvalidOverwriteException, ForbiddenKeywordException, InvalidInputException, StringQueueEmptyException, CouldNotFindDefinitionException, SkolemnException
+
     {
-        Scanner scan = new Scanner(System.in);
-        while (true)
+
+        System.out.println("Awaiting Input:");
+        String s = scan.nextLine();
+        System.out.println();
+        if (s.equals("file"))
         {
-            System.out.println("Awaiting Input:");
-            System.out.println(scan.nextLine());
-            if (true)
+            this.FileInput();
+        }
+        else if (s.equals("exit") || s.equals("quit"))
+        {
+            scan.close();
+            System.exit(0);
+        }
+        else if (s.equals("help"))
+        {
+            System.out.println("\"file\" will allow you to input a file location to read from");
+            System.out.println("exit / quit will end the application");
+            System.out.println("TELL [variable/object] [name] will enter a new definition");
+            System.out.println("TELL function [name] [number of arguments] will enter a new function definition");
+            System.out.println("TELL formula [formula] will enter a new formula");
+        }
+        else
+        {
+            try
             {
-                break;
+                parser.ParseSingleLine(s, names, formulas);
+            }
+            catch (UnrecognizedInputException e)
+            {
+                System.out.println("Invalid input, type \"help\" for help");
             }
         }
-
-        scan.close();
+        System.out.println();
+        waitForInput();
     }
 
     public void printListToConsole()
     {
-        System.out.println();
         Iterator<String> iterator = names.keySet().iterator();
 
-        while (iterator.hasNext()) {
-           String key = iterator.next().toString();
-           FOLElement value = names.get(key);
+        while (iterator.hasNext())
+        {
+            String key = iterator.next().toString();
+            FOLElement value = names.get(key);
 
-           System.out.println(value.toString());
+            System.out.println(value.toString());
         }
         System.out.println();
-        
-        for(FOLFormula form : formulas)
+
+        for (FOLFormula form : formulas)
         {
             form.printFormula();
         }
+        System.out.println();
     }
 }

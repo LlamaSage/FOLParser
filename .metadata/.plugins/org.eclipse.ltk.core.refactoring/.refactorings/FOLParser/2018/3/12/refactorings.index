@@ -1,1 +1,8 @@
 1521835558247	Move compilation unit
+1521994102524	Delete element
+1521998144740	Move compilation unit
+1521998150099	Move compilation unit
+1522000293672	Rename field 'compareToTermsList'
+1522000359080	Rename method 'checkTermAgainstList'
+1522002373589	Move compilation unit
+1522002468374	Rename type 'InvalidTermCopyException'

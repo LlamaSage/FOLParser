@@ -37,6 +37,14 @@ public class FOLFunctionPrototype extends FOLElement
     }
     
     @Override
+    public FOLMatchEnum strictCompareTo(FOLElement e)
+    {
+        if (this == e)
+            return FOLMatchEnum.FullMatch;
+        return FOLMatchEnum.NoMatch;
+    }
+    
+    @Override
     public boolean equals(Object o)
     {
         if(super.equals(o) && this.number == ((FOLFunctionPrototype) o).number)
@@ -48,5 +56,7 @@ public class FOLFunctionPrototype extends FOLElement
     {
         return "Function Prototype: "+super.toString()+" ["+this.number+"]";
     }
+
+
 
 }

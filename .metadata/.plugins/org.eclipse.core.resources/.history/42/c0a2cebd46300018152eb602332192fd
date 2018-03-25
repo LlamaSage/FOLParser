@@ -1,0 +1,17 @@
+package objects;
+
+import java.util.Comparator;
+
+public class FOLElementComparator implements Comparator<FOLElement>
+{
+
+    
+
+    @Override
+    public int compare(FOLElement a, FOLElement b)
+    {
+        
+        return 0;
+    }
+    
+}

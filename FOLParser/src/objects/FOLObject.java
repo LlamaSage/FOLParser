@@ -28,10 +28,17 @@ public class FOLObject extends FOLElement
             return FOLMatchEnum.FullMatch;
         return FOLMatchEnum.NoMatch;
     }
+    
+    @Override
+    public FOLMatchEnum strictCompareTo(FOLElement e)
+    {
+        if (this == e)
+            return FOLMatchEnum.FullMatch;
+        return FOLMatchEnum.NoMatch;
+    }
 
     public String toString()
     {
         return "Object: "+super.toString();
     }
-
 }

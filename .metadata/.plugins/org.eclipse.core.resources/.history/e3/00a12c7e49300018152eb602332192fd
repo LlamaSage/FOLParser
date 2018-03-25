@@ -1,0 +1,76 @@
+package parser;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Scanner;
+import java.util.TreeMap;
+
+import objects.*;
+
+public class RunTimeMethods
+{
+    
+    public TreeMap<String, FOLElement> names = new TreeMap<String, FOLElement>();
+    public ArrayList<FOLFormula> formulas = new ArrayList<FOLFormula>();
+    // 0 = objects
+    // 1 = variables
+    // 2 = functions
+    // 3 = terms
+
+    FOLParser parser = new FOLParser();
+
+    public void FileInput()
+    {
+        Scanner scan = new Scanner(System.in);
+
+        System.out.println("Input file name/location:");
+        Path path = Paths.get(scan.nextLine());
+        while (Files.notExists(path))
+        {
+            System.out.println("Cannot find file, try again");
+            path = Paths.get(scan.nextLine());
+        }
+
+        parser.ParseFile(path.toString(), names, formulas);
+
+        scan.close();
+    }
+
+    public void waitForInput() //TODO: Just a proxy for the meantime
+    {
+        Scanner scan = new Scanner(System.in);
+        while (true)
+        {
+            System.out.println("Awaiting Input:");
+            System.out.println(scan.nextLine());
+            if (true)
+            {
+                break;
+            }
+        }
+
+        scan.close();
+    }
+
+    public void printListToConsole()
+    {
+        System.out.println();
+        Iterator<String> iterator = names.keySet().iterator();
+
+        while (iterator.hasNext()) {
+           String key = iterator.next().toString();
+           FOLElement value = names.get(key);
+
+           System.out.println(value.toString());
+        }
+        System.out.println();
+        
+        for(FOLFormula form : formulas)
+        {
+            form.printFormula();
+        }
+    }
+}
