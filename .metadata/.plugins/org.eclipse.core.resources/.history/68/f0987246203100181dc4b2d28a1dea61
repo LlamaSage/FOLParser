@@ -26,24 +26,6 @@ public class FOLObject extends FOLElement
     @Override
     public FOLMatchEnum compareTo(FOLElement e, HashMap<FOLElement, FOLElement> subs)
     {
-        if(e instanceof FOLVariable)
-        {
-            if(subs.containsKey(e))
-            {
-                if(subs.get(e).strictCompareTo(this, subs) == FOLMatchEnum.FullMatch)
-                {
-                    return FOLMatchEnum.PartialMatch;
-                }
-                else
-                    return FOLMatchEnum.NoMatch;
-            }
-            else
-            {
-                subs.put(e, this);
-                return FOLMatchEnum.PartialMatch;
-            }
-              
-        }
         if (this == e)
             return FOLMatchEnum.FullMatch;
         return FOLMatchEnum.NoMatch;

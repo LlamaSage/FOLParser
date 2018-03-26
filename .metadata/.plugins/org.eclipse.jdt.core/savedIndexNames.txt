@@ -4,7 +4,6 @@ INDEX VERSION 1.126+D:\GitKraken Repos\Java\FOLParser\.metadata\.plugins\org.ecl
 4266428024.index
 136936140.index
 2033839043.index
-132177047.index
 756006386.index
 1295027826.index
 2349671270.index

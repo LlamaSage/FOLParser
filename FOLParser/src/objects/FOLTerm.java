@@ -61,7 +61,7 @@ public class FOLTerm
         if(subs == null)
             subs = new HashMap<FOLElement, FOLElement>();
         if (this.notInverted != term.notInverted)
-            return compareTo(term, subs);
+            return element.compareTo(term.element, subs);
         return FOLMatchEnum.NoMatch;
     }
 

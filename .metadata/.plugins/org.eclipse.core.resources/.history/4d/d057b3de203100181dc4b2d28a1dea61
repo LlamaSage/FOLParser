@@ -76,25 +76,6 @@ public class FOLFunction extends FOLElement
     @Override
     public FOLMatchEnum strictCompareTo(FOLElement e, HashMap<FOLElement, FOLElement> subs)
     {
-        if(e instanceof FOLVariable)
-        {
-            if(subs.containsKey(e))
-            {
-                if(subs.get(e).strictCompareTo(this, subs) == FOLMatchEnum.FullMatch)
-                {
-                    return FOLMatchEnum.PartialMatch;
-                }
-                else
-                    return FOLMatchEnum.NoMatch;
-            }
-            else
-            {
-                subs.put(e, this);
-                return FOLMatchEnum.PartialMatch;
-            }
-              
-        }
-        
         if (e instanceof FOLFunction)
         {
             FOLFunction func = (FOLFunction) e;
