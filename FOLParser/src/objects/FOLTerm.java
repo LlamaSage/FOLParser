@@ -46,25 +46,31 @@ public class FOLTerm
 
     }
 
-    public FOLMatchEnum compareTo(FOLTerm term)
+    public FOLMatchEnum compareTo(FOLTerm term, HashMap<FOLElement, FOLElement> subs)
     {
+        if(subs == null)
+            subs = new HashMap<FOLElement, FOLElement>();
         if (this.notInverted == term.notInverted)
-            return element.compareTo(term.element);
+            return element.compareTo(term.element, subs);
 
         return FOLMatchEnum.NoMatch;
     }
 
-    public FOLMatchEnum compCompareTo(FOLTerm term)
+    public FOLMatchEnum compCompareTo(FOLTerm term, HashMap<FOLElement, FOLElement> subs)
     {
+        if(subs == null)
+            subs = new HashMap<FOLElement, FOLElement>();
         if (this.notInverted != term.notInverted)
-            return compareTo(term);
+            return compareTo(term, subs);
         return FOLMatchEnum.NoMatch;
     }
 
-    public FOLMatchEnum strictCompareTo(FOLTerm term)
+    public FOLMatchEnum strictCompareTo(FOLTerm term, HashMap<FOLElement, FOLElement> subs)
     {
+        if(subs == null)
+            subs = new HashMap<FOLElement, FOLElement>();
         if (this.notInverted == term.notInverted)
-            return element.strictCompareTo(term.element);
+            return element.strictCompareTo(term.element, subs);
         else
             return FOLMatchEnum.NoMatch;
     }

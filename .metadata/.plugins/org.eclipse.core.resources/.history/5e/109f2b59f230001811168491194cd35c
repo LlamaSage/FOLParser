@@ -1,7 +1,5 @@
 package objects;
 
-import java.util.HashMap;
-
 import exceptions.ForbiddenKeywordException;
 import parser.FOLMatchEnum;
 
@@ -24,7 +22,7 @@ public class FOLObject extends FOLElement
     }
 
     @Override
-    public FOLMatchEnum compareTo(FOLElement e, HashMap<FOLElement, FOLElement> subs)
+    public FOLMatchEnum compareTo(FOLElement e)
     {
         if (this == e)
             return FOLMatchEnum.FullMatch;
@@ -32,7 +30,7 @@ public class FOLObject extends FOLElement
     }
     
     @Override
-    public FOLMatchEnum strictCompareTo(FOLElement e, HashMap<FOLElement, FOLElement> subs)
+    public FOLMatchEnum strictCompareTo(FOLElement e)
     {
         if (this == e)
             return FOLMatchEnum.FullMatch;

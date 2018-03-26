@@ -84,7 +84,7 @@ public class FOLFunction extends FOLElement
                 FOLMatchEnum funcMatch = FOLMatchEnum.FullMatch;
                 for (int i = 0; i < arguments.length; i++)
                 {
-                    switch (this.arguments[i].compareTo(func.arguments[i], subs))
+                    switch (this.arguments[i].compareTo(func.arguments[i]))
                     {
                         case FullMatch:
 

@@ -42,8 +42,11 @@ public class FOLVariable extends FOLElement
             else
                 return FOLMatchEnum.NoMatch;
         }
-        subs.put(this, e);
-        return FOLMatchEnum.PartialMatch;
+        else
+        {
+            subs.put(this, e);
+            return FOLMatchEnum.PartialMatch;
+        }
     }
 
     @Override

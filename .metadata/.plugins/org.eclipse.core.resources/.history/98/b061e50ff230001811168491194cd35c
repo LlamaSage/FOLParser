@@ -86,8 +86,8 @@ public abstract class FOLElement
         
     }
 
-    public abstract FOLMatchEnum compareTo(FOLElement e, HashMap<FOLElement, FOLElement> subs);
+    public abstract FOLMatchEnum compareTo(FOLElement e);
 
-    public abstract FOLMatchEnum strictCompareTo(FOLElement e, HashMap<FOLElement, FOLElement> subs);
+    public abstract FOLMatchEnum strictCompareTo(FOLElement e);
 
 }

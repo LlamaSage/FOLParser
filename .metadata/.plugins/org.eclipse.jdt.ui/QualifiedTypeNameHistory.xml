@@ -12,14 +12,14 @@
 <fullyQualifiedTypeName name="java.util.TreeMap"/>
 <fullyQualifiedTypeName name="objects.FOLElement"/>
 <fullyQualifiedTypeName name="java.util.Comparator"/>
-<fullyQualifiedTypeName name="java.util.HashMap"/>
 <fullyQualifiedTypeName name="objects.FOLFunction"/>
 <fullyQualifiedTypeName name="objects.FOLFunctionPrototype"/>
 <fullyQualifiedTypeName name="exceptions.InvalidInputException"/>
 <fullyQualifiedTypeName name="exceptions.UnrecognizedInputException"/>
 <fullyQualifiedTypeName name="java.util.LinkedList"/>
-<fullyQualifiedTypeName name="parser.FOLMatchEnum"/>
 <fullyQualifiedTypeName name="objects.FOLTerm"/>
 <fullyQualifiedTypeName name="exceptions.InvalidCopyException"/>
 <fullyQualifiedTypeName name="exceptions.SkolemnException"/>
+<fullyQualifiedTypeName name="java.util.HashMap"/>
+<fullyQualifiedTypeName name="parser.FOLMatchEnum"/>
 </qualifiedTypeNameHistroy>

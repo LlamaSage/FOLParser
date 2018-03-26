@@ -1,6 +1,5 @@
 package objects;
 
-import java.util.HashMap;
 import java.util.TreeMap;
 
 import exceptions.InvalidCopyException;
@@ -42,7 +41,7 @@ public class FOLFunction extends FOLElement
     }
 
     @Override
-    public FOLMatchEnum compareTo(FOLElement e, HashMap<FOLElement, FOLElement> subs)
+    public FOLMatchEnum compareTo(FOLElement e)
     {
         if (e instanceof FOLFunction)
         {
@@ -52,7 +51,7 @@ public class FOLFunction extends FOLElement
                 FOLMatchEnum funcMatch = FOLMatchEnum.FullMatch;
                 for (int i = 0; i < arguments.length; i++)
                 {
-                    switch (this.arguments[i].compareTo(func.arguments[i], subs))
+                    switch (this.arguments[i].compareTo(func.arguments[i]))
                     {
                         case FullMatch:
 
@@ -74,7 +73,7 @@ public class FOLFunction extends FOLElement
     }
     
     @Override
-    public FOLMatchEnum strictCompareTo(FOLElement e, HashMap<FOLElement, FOLElement> subs)
+    public FOLMatchEnum strictCompareTo(FOLElement e)
     {
         if (e instanceof FOLFunction)
         {
@@ -84,7 +83,7 @@ public class FOLFunction extends FOLElement
                 FOLMatchEnum funcMatch = FOLMatchEnum.FullMatch;
                 for (int i = 0; i < arguments.length; i++)
                 {
-                    switch (this.arguments[i].compareTo(func.arguments[i], subs))
+                    switch (this.arguments[i].compareTo(func.arguments[i]))
                     {
                         case FullMatch:
 

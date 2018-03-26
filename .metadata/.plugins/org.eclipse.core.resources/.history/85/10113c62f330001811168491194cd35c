@@ -5,42 +5,54 @@ import java.util.HashMap;
 import exceptions.ForbiddenKeywordException;
 import parser.FOLMatchEnum;
 
-public class FOLObject extends FOLElement
+public class FOLVariable extends FOLElement
 {
 
-    public FOLObject(String name)
+    public FOLVariable(String name)
     {
         super(name);
     }
 
-    public static FOLObject parse(String s) throws ForbiddenKeywordException
+    public static FOLVariable parse(String s) throws ForbiddenKeywordException
     {
         String[] split = s.split(" ");
         if (split[2].equals("lub") || split[2].equals("nie"))
         {
             throw new ForbiddenKeywordException("Forbidden keyword \"" + split[2] + "\"");
         }
-        return new FOLObject(split[2]);
+        return new FOLVariable(split[2]);
     }
 
     @Override
     public FOLMatchEnum compareTo(FOLElement e, HashMap<FOLElement, FOLElement> subs)
     {
-        if (this == e)
-            return FOLMatchEnum.FullMatch;
-        return FOLMatchEnum.NoMatch;
+        if (e instanceof FOLVariable)
+        {
+            if (this == e)
+                return FOLMatchEnum.FullMatch;
+        }
+        if(subs.containsKey(this))
+        {
+            return subs.get(this).strictCompareTo(e, subs);
+        }
+        return FOLMatchEnum.PartialMatch;
     }
     
     @Override
     public FOLMatchEnum strictCompareTo(FOLElement e, HashMap<FOLElement, FOLElement> subs)
     {
-        if (this == e)
-            return FOLMatchEnum.FullMatch;
+        if (e instanceof FOLVariable)
+        {
+            if (this == e)
+                return FOLMatchEnum.FullMatch;
+        }
         return FOLMatchEnum.NoMatch;
     }
 
     public String toString()
     {
-        return "Object: "+super.toString();
+        return "Variable: "+super.toString();
     }
+
+
 }

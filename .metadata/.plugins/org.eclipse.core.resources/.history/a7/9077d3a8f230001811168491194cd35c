@@ -1,7 +1,5 @@
 package objects;
 
-import java.util.HashMap;
-
 import exceptions.ForbiddenKeywordException;
 import parser.FOLMatchEnum;
 
@@ -24,30 +22,18 @@ public class FOLVariable extends FOLElement
     }
 
     @Override
-    public FOLMatchEnum compareTo(FOLElement e, HashMap<FOLElement, FOLElement> subs)
+    public FOLMatchEnum compareTo(FOLElement e)
     {
-
         if (e instanceof FOLVariable)
         {
             if (this == e)
                 return FOLMatchEnum.FullMatch;
         }
-
-        if (subs.containsKey(this))
-        {
-            if (subs.get(this).strictCompareTo(e, subs) == FOLMatchEnum.FullMatch)
-            {
-                return FOLMatchEnum.PartialMatch;
-            }
-            else
-                return FOLMatchEnum.NoMatch;
-        }
-        subs.put(this, e);
         return FOLMatchEnum.PartialMatch;
     }
-
+    
     @Override
-    public FOLMatchEnum strictCompareTo(FOLElement e, HashMap<FOLElement, FOLElement> subs)
+    public FOLMatchEnum strictCompareTo(FOLElement e)
     {
         if (e instanceof FOLVariable)
         {
@@ -59,7 +45,8 @@ public class FOLVariable extends FOLElement
 
     public String toString()
     {
-        return "Variable: " + super.toString();
+        return "Variable: "+super.toString();
     }
+
 
 }

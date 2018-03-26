@@ -1,11 +1,14 @@
 package objects;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.TreeMap;
 
 import exceptions.CouldNotFindDefinitionException;
 import exceptions.InvalidInputException;
+import exceptions.InvalidCopyException;
+import exceptions.StringQueueEmptyException;
 import parser.FOLMatchEnum;
 
 public class FOLTerm
@@ -16,7 +19,7 @@ public class FOLTerm
 
     public boolean notInverted;
 
-    public FOLTerm(FOLTerm toCopy) throws Exception // TODO: Check
+    public FOLTerm(FOLTerm toCopy) throws InvalidCopyException
     {
         this.notInverted = toCopy.notInverted;
         if (toCopy.element instanceof FOLObject)
@@ -33,7 +36,7 @@ public class FOLTerm
         }
         else
         {
-            throw new Exception();
+            throw new InvalidCopyException("Element of Term of invalid type!");
         }
 
     }
@@ -51,14 +54,22 @@ public class FOLTerm
         return FOLMatchEnum.NoMatch;
     }
 
-    public FOLMatchEnum compCompareTo(FOLTerm term)
+    public FOLMatchEnum compCompareTo(FOLTerm term, HashMap<FOLElement, FOLElement> subs)
     {
         if (this.notInverted != term.notInverted)
             return compareTo(term);
         return FOLMatchEnum.NoMatch;
     }
 
-    public static FOLTerm parse(String s, TreeMap<String, FOLElement> names) throws Exception
+    public FOLMatchEnum strictCompareTo(FOLTerm term, HashMap<FOLElement, FOLElement> subs)
+    {
+        if (this.notInverted == term.notInverted)
+            return element.strictCompareTo(term.element, subs);
+        else
+            return FOLMatchEnum.NoMatch;
+    }
+
+    public static FOLTerm parse(String s, TreeMap<String, FOLElement> names) throws InvalidInputException, StringQueueEmptyException, CouldNotFindDefinitionException
     {
         FOLTerm term = new FOLTerm();
 
@@ -87,12 +98,14 @@ public class FOLTerm
         return term;
     }
 
-    public static FOLElement parseElement(Queue<String> q, TreeMap<String, FOLElement> names) throws Exception
+    public static FOLElement parseElement(Queue<String> q, TreeMap<String, FOLElement> names) throws StringQueueEmptyException, CouldNotFindDefinitionException
     {
         String s = q.poll();
         if (s == null)
         {
-            throw new Exception("StringQueue is empty"); // TODO: Clean up
+            throw new StringQueueEmptyException("StringQueue is empty"); // TODO:
+                                                                         // Clean
+                                                                         // up
         }
         FOLElement element = names.get(s);
         if (element == null)
@@ -114,18 +127,22 @@ public class FOLTerm
 
     public String toString()
     {
+        String s = "";
+        if (!this.notInverted)
+        {
+            s+="nie ";
+        }
         if (this.element instanceof FOLObject || this.element instanceof FOLVariable)
-            return element.name;
+            return s+element.name;
         else
-            return ((FOLFunction) this.element).toString();
+            return s+((FOLFunction) this.element).toString();
     }
-    
-    public FOLTerm substitution(TreeMap<FOLElement, FOLElement> subs) //TODO: Check
+
+    public void substitution(HashMap<FOLElement, FOLElement> subs) throws Exception // TODO:
+    // Check
     {
-        if(this.element instanceof FOLVariable)
-            if(subs.containsKey(this.element))
-                this.element = 
-        
-        return null;
+        System.out.println("Prior Element: " + this.element.toString());
+        this.element = this.element.substitute(subs);
+        System.out.println("New Element: " + this.element.toString());
     }
 }
